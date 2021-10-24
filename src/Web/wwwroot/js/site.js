@@ -12,59 +12,102 @@ var employeesTable;
 
 $(document).ready(function () {
     // Initialize Employees Table
-        initEmployeesTable()
-    // Add New Employee 
-        $("#addEmployeeButton").on("click", function () {
-          let newEmployee = $("#addEmployeeForm").serializeJSON();
-          newEmployee.birthDate = new Date(newEmployee.birthDate).toISOString();
-          $.ajax({
-            url: baseApiUrl + "api/employees",
-            type: "POST",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify(newEmployee),
-            success: function (result) {
-              $("#newEmployeeSuccessAlert").fadeIn(1000);
-              setTimeout(function () {
-                $("#newEmployeeSuccessAlert").fadeOut(1000);
-              }, 2000); setTimeout(function () {
-                $("#addEmployeeModal").modal("hide"); 
-                $(":input", "#addEmployeeForm")
-                  .not(":button, :submit, :reset, :hidden")
-                  .val("")
-                  .prop("checked", false)
-                  .prop("selected", false);
-                $("#employeesTable").DataTable().ajax.reload();
-              }, 3000);
-            },
-            error: function (xhr, resp, text) {
-              console.log(xhr, resp, text);
+        initEmployeesTable();
+        $('#addEmployeeForm input').on('focusout focus change', function () {        
+        if (!this.checkValidity()) {
+            $(this).removeClass('is-valid is-invalid').addClass('is-invalid');
+        }
+                else {
+                $(this).removeClass('is-valid is-invalid').addClass('is-valid');
             }
-          });
+    });
+        $('#editEmployeeForm input').on('focusout focus change', function () {
+        if (!this.checkValidity()) {
+            $(this).removeClass('is-valid is-invalid').addClass('is-invalid');
+        }
+        else {
+            $(this).removeClass('is-valid is-invalid').addClass('is-valid');
+        }
+    });
+
+    // Add New Employee
+        $("#addEmployeeButton").on("click", function (event) {
+        $('#addEmployeeForm').removeClass('is-valid is-invalid');
+        if ($('#addEmployeeForm.needs-validation')[0].checkValidity() === false) {
+            $("#addEmployeeForm input").each(function () {
+                if (!this.checkValidity()) {
+                    $(this).removeClass('is-valid is-invalid').addClass('is-invalid');
+                }
+            });
+        } else {
+            let newEmployee = $("#addEmployeeForm").serializeJSON();
+            newEmployee.birthDate = new Date(newEmployee.birthDate).toISOString();
+            $.ajax({
+                url: baseApiUrl + "api/employees",
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(newEmployee),
+                success: function (result) {
+                    $("#newEmployeeSuccessAlert").fadeIn(1000);
+                    setTimeout(function () {
+                        $("#newEmployeeSuccessAlert").fadeOut(1000);
+                    }, 2000); setTimeout(function () {
+                        $("#addEmployeeModal").modal("hide");
+                        $(":input", "#addEmployeeForm")
+                            .not(":button, :submit, :reset, :hidden")
+                            .val("")
+                            .prop("checked", false)
+                            .prop("selected", false);
+                        $("#employeesTable").DataTable().ajax.reload();
+                    }, 3000);
+                },
+                error: function (xhr, resp, text) {
+                    console.log(xhr, resp, text);
+                }
+            });
+        }
         });
     
     // Edit Employee
-        $('#editEmployeeButton').on("click", function (e) {
-          e.preventDefault();
-          let editedEmployee = $("#editEmployeeForm").serializeJSON();
-          editedEmployee.id = parseInt($("#item_id").val());
-          editedEmployee.birthDate = new Date(editedEmployee.birthDate).toISOString();
-          $.ajax({
-            url: baseApiUrl + "api/employees",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify(editedEmployee),
-            type: "PUT",
-            success: function (response) {
-              $("#editEmployeeSuccessAlert").fadeIn(1000);
-              setTimeout(function () {
-                $("#editEmployeeSuccessAlert").fadeOut(1000); $("#editEmployeeModal").modal("hide");
-              }, 2000);
-              employeesTable.ajax.reload(null, false);
+        $('#editEmployeeButton').on("click", function (event) {
+        event.preventDefault();
+            $('#editEmployeeForm').removeClass('is-valid is-invalid');
+            if ($('#editEmployeeForm.needs-validation')[0].checkValidity() === false) {
+                $("#editEmployeeForm input").each(function () {
+                    if (!this.checkValidity()) {
+                        $(this).removeClass('is-valid is-invalid').addClass('is-invalid');
+                    }
+                });
+            } else {
+                let editedEmployee = $("#editEmployeeForm").serializeJSON();
+                editedEmployee.id = parseInt($("#item_id").val());
+                editedEmployee.birthDate = new Date(editedEmployee.birthDate).toISOString();
+                $.ajax({
+                    url: baseApiUrl + "api/employees",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(editedEmployee),
+                    type: "PUT",
+                    success: function (response) {
+                        $("#editEmployeeSuccessAlert").fadeIn(1000);
+                        setTimeout(function () {
+                            $("#editEmployeeSuccessAlert").fadeOut(1000); $("#editEmployeeModal").modal("hide");
+                        }, 2000); setTimeout(function () {
+                            $("#addEmployeeModal").modal("hide");
+                            $(":input", "#addEmployeeForm")
+                                .not(":button, :submit, :reset, :hidden")
+                                .val("")
+                                .prop("checked", false)
+                                .prop("selected", false);
+                        });
+                        employeesTable.ajax.reload(null, false);
+                    }
+                })
             }
-          })
         });
-    // Delete Employee    
+
+    // Delete Employee
         $('#deleteEmployeeButton').on('click', function (e) {
           e.preventDefault();
           var deletingEmployee = {};
@@ -95,9 +138,15 @@ function initEmployeesTable() {
         "columns": [
           { "data": "firstName" },
           { "data": "lastName" },
-          { "data": "age" },
-          { "data": null, "defaultContent": actionsTd }
-        ]
+            { "data": "age" },
+            { "data": null, "defaultContent": actionsTd }
+        ],
+        rowCallback: function (row, data, index) {
+            if (data.id >4) {
+                $("td:eq(3)", row).find(".contracts").addClass('d-none');
+                $("td:eq(3)", row).find(".download_all").addClass('d-none');
+            }
+        }
       });
       return employeesTable;
 }

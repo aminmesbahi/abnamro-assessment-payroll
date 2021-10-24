@@ -81,24 +81,24 @@
                 <div id="newEmployeeSuccessAlert" class="alert alert-success" style="display:none;" role="alert">
                     <i class="bi bi-check2-circle"></i> The new employee saved!
                 </div>
-                <form id="addEmployeeForm">
+                <form id="addEmployeeForm" class="row g-3 needs-validation" novalidate>
                     <div class="mb-3">
-                        <label for="firstName" class="col-form-label">First Name:</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName">
+                        <label for="firstName" class="form-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" required>
                         <div class="invalid-feedback">
                             First name is rquired.
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="lastName" class="col-form-label">Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName">
+                        <label for="lastName" class="form-label">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" required>
                         <div class="invalid-feedback">
                             Last name is rquired.
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="birthDate" class="col-form-label">Birth Date:</label>
-                        <input type="date" class="form-control" id="birthDate" name="birthDate">
+                        <label for="birthDate" class="form-label">Birth Date:</label>
+                        <input type="date" class="form-control" id="birthDate" name="birthDate" required>
                         <div class="invalid-feedback">
                             Birth Date is rquired.
                         </div>
@@ -107,7 +107,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="addEmployeeButton">Save</button>
+                <button type="submit" class="btn btn-primary" id="addEmployeeButton">Save</button>
             </div>
         </div>
     </div>
@@ -129,24 +129,24 @@
                 <div id="editEmployeeSuccessAlert" class="alert alert-success" style="display:none;" role="alert">
                     <i class="bi bi-check2-circle"></i> The employee data saved!
                 </div>
-                <form id="editEmployeeForm">
+                <form id="editEmployeeForm" class="row g-3 needs-validation" novalidate>
                     <div class="mb-3">
-                        <label for="firstName" class="col-form-label">First Name:</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName">
+                        <label for="firstName" class="form-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" required>
                         <div class="invalid-feedback">
                             First name is rquired.
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="lastName" class="col-form-label">Last Name:</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName">
+                        <label for="lastName" class="form-label">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" required>
                         <div class="invalid-feedback">
                             Last name is rquired.
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="birthDate" class="col-form-label">Birth Date:</label>
-                        <input type="date" class="form-control" id="birthDate" name="birthDate">
+                        <label for="birthDate" class="form-label">Birth Date:</label>
+                        <input type="date" class="form-control" id="birthDate" name="birthDate" required>
                         <div class="invalid-feedback">
                             Birth Date is rquired.
                         </div>
@@ -155,7 +155,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="editEmployeeButton">Save changes</button>
+                <button type="submit" class="btn btn-primary" id="editEmployeeButton">Save changes</button>
             </div>
         </div>
     </div>

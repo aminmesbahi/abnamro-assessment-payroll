@@ -1,6 +1,4 @@
-﻿using Assessment.ApplicationCore.Entities;
-
-namespace Assessment.Api.EmployeeEndpoints
+﻿namespace Assessment.Api.EmployeeEndpoints
 {
     public class EmployeeDto
     {
@@ -9,6 +7,8 @@ namespace Assessment.Api.EmployeeEndpoints
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public int Age { get { return DateTime.Now.Subtract(BirthDate).Days / 365; } }
+
+        public bool HaveContract { get; set; }
 
     }
 }
