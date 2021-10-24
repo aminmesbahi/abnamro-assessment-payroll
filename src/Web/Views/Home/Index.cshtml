@@ -1,176 +1,193 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Payroll Management";
 }
 
 <div class="table-wrapper">
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-6">
-						<h2>Manage <b>Employees</b></h2>
-					</div>
-					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="bi bi-person-plus"></i> <span>Add New Employee</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
-					</div>
+  <div class="table-title">
+    <div class="row">
+      <div class="col-sm-5">
+        <h2>Manage <b>Employees</b></h2>
+      </div>
+      <div class="col-sm-7">
+        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#addEmployeeModal"
+          data-toggle="modal"><i class="bi bi-person-plus"></i>&nbsp;&nbsp;<span>Add New Employee</span></button>
+      </div>
+    </div>
+  </div>
+  <table id="employeesTable" class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+<!--#region History Modal-->
+<div class="modal fade" id="employeeHistoryModal" tabindex="-1" aria-labelledby="employeeHistoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="employeeHistoryModalLabel"><i class="bi bi-clock-history"></i>Employee History</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="contracts"></div>
+                <div class="accordion" id="employeeContractsAccordion">
+                    <script id="contractsTmpl" type="text/x-jsrender">
+                        <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-{{>Id}}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{>Id}}" aria-expanded="true" aria-controls="collapse-{{>Id}}">
+                        <b>Contract From:</b>&nbsp;&nbsp;&nbsp;&nbsp; {{>StartDate.substring(0, 10)}} &nbsp;&nbsp;&nbsp; <b>To:</b> &nbsp;&nbsp;&nbsp; {{>EndDate.substring(0, 10)}} 
+                        </button>
+                        </h2>
+                        <div id="collapse-{{>Id}}" class="accordion-collapse collapse" aria-labelledby="heading-{{>Id}}" data-bs-parent="#employeeContractsAccordion">
+                        <div class="accordion-body">
+                        <ul style="list-style-type: none;">
+                        {{for Timesheets}}
+                        <li class="mb-3 text-secondary">
+                        Timesheet for:&nbsp;&nbsp;  <b> {{>FromDate.substring(0, 10)}}</b>&nbsp;&nbsp;&nbsp; To: <b> {{>ToDate.substring(0, 10)}}</b>&nbsp;&nbsp;&nbsp;<i onclick="downloadPaymentHistory({{>PaymentHistories[0].Id}});" class="fs-5 bi bi-file-earmark-arrow-down text-success" data-bs-toggle="tooltip" title="Download Salary History as CSV file"></i>
+                        </li>
+                        {{/for}}
+                        </ul>
+                        </div>
+                        </div>
+                        </div>
+                    </script>
                 </div>
             </div>
-            <table id="employeesTable" class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-						<th>Age</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                   
-                </tbody>
-            </table>
-			<div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-	<!-- Edit Modal HTML -->
-	<div id="addEmployeeModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Add Employee</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
-						</div>
-						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
-						</div>					
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- Edit Modal HTML -->
-	<div id="editEmployeeModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Edit Employee</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
-						</div>
-						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
-						</div>					
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" value="Save">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- Delete Modal HTML -->
-	<div id="deleteEmployeeModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Delete Employee</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<p>Are you sure you want to delete these Records?</p>
-						<p class="text-warning"><small>This action cannot be undone.</small></p>
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-danger" value="Delete">
-					</div>
-				</form>
-			</div>
-		</div>
+</div>
+<!--#endregion History Modal-->
+
+<!--#region Create Employee Modal-->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEmployeeModalLabel"><i class="bi bi-person-plus"></i>Add Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="newEmployeeSuccessAlert" class="alert alert-success" style="display:none;" role="alert">
+                    <i class="bi bi-check2-circle"></i> The new employee saved!
+                </div>
+                <form id="addEmployeeForm">
+                    <div class="mb-3">
+                        <label for="firstName" class="col-form-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName">
+                        <div class="invalid-feedback">
+                            First name is rquired.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="col-form-label">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName">
+                        <div class="invalid-feedback">
+                            Last name is rquired.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="birthDate" class="col-form-label">Birth Date:</label>
+                        <input type="date" class="form-control" id="birthDate" name="birthDate">
+                        <div class="invalid-feedback">
+                            Birth Date is rquired.
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addEmployeeButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="item_id" value="0" />
+<!--#endregion Create Employee Modal-->
+
+
+<!--#region Edit Employee Modal-->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editEmployeeModalLabel"><i class="bi bi-pencil"></i>Edit Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="editEmployeeSuccessAlert" class="alert alert-success" style="display:none;" role="alert">
+                    <i class="bi bi-check2-circle"></i> The employee data saved!
+                </div>
+                <form id="editEmployeeForm">
+                    <div class="mb-3">
+                        <label for="firstName" class="col-form-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName">
+                        <div class="invalid-feedback">
+                            First name is rquired.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="col-form-label">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName">
+                        <div class="invalid-feedback">
+                            Last name is rquired.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="birthDate" class="col-form-label">Birth Date:</label>
+                        <input type="date" class="form-control" id="birthDate" name="birthDate">
+                        <div class="invalid-feedback">
+                            Birth Date is rquired.
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="editEmployeeButton">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--#endregion Edit Employee Modal-->
+
+
+
+<!--#region Delete Employee Modal-->
+<div class="modal modal-danger fade" id="deleteEmployeeModal" tabindex="-1" aria-labelledby="deleteEmployeeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteEmployeeModalLabel"><i class="bi bi-trash"></i>Delete Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="deleteEmployeeSuccessAlert" class="alert alert-success" style="display:none;" role="alert">
+                    <i class="bi bi-check2-circle"></i> The employee Deleted!
+                </div>
+                <p>Are You sure? Do you want to delete this Employee?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="deleteEmployeeButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--#endregion Delete Employee Modal-->
+
 @section Scripts {
-<script type="text/javascript">
-	var actionsTd=`
 
-							<a href="#historyEmployeeModal" class="history" data-toggle="modal"><i class="bi bi-file-earmark-arrow-down" data-toggle="tooltip" title="Download Salary History as CSV file"></i></a>
-							<a href="#historyEmployeeModal" class="history" data-toggle="modal"><i class="bi bi-clock-history" data-toggle="tooltip" title="Salary History"></i></a>
-                            <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="bi bi-pencil" data-toggle="tooltip" title="Edit"></i></a>
-                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="bi bi-trash" data-toggle="tooltip" title="Delete"></i></a>
-                        
-`;
-		$(document).ready(function(){
-
-
-	$.get("https://localhost:7124/api/employees?PageSize=15&PageIndex=0", function(data, status){
-	var table = $("#employeesTable tbody");
-    $.each(data.employees, function(idx, elem){
-        table.append("<tr><td>"+elem.firstName+"</td><td>"+elem.lastName+"</td>   <td>"+elem.birthDate+"</td><td>"+actionsTd+"</td></tr>");
-    });
-  });
-	// Activate tooltip
-	$('[data-toggle="tooltip"]').tooltip();
-	
-	// Select/Deselect checkboxes
-	var checkbox = $('table tbody input[type="checkbox"]');
-	$("#selectAll").click(function(){
-		if(this.checked){
-			checkbox.each(function(){
-				this.checked = true;                        
-			});
-		} else{
-			checkbox.each(function(){
-				this.checked = false;                        
-			});
-		} 
-	});
-	checkbox.click(function(){
-		if(!this.checked){
-			$("#selectAll").prop("checked", false);
-		}
-	});
-});
-</script>
 }

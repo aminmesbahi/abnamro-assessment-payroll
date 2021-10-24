@@ -25,6 +25,7 @@
         public int SickLeaveHours { get; set; }
         public int VacationHours { get; set; }
         public bool IsPayed { get; set; }
+        public IList<PaymentHistory> PaymentHistories { get; set; }
     }
 
 }

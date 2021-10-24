@@ -34,7 +34,9 @@ if (!builder.Environment.IsDevelopment()) {
 else
 {
     builder.Services.AddDbContext<PayrollContext>(c =>
-        c.UseInMemoryDatabase("Catalog"));
+      c.UseInMemoryDatabase("Catalog"));
+   // builder.Services.AddDbContext<PayrollContext>(c =>
+     //         c.UseSqlServer(builder.Configuration.GetConnectionString("PayrollConnection")));
 }
 
 builder.Services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));

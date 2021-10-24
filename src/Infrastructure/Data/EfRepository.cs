@@ -1,20 +1,11 @@
 ﻿using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Assessment.ApplicationCore.Entities;
 using Assessment.ApplicationCore.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assessment.Infrastructure.Data
 {
-    /// <summary>
-    /// "There's some repetition here - couldn't we have some the sync methods call the async?"
-    /// https://blogs.msdn.microsoft.com/pfxteam/2012/04/13/should-i-expose-synchronous-wrappers-for-asynchronous-methods/
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class EfRepository<T> : IAsyncRepository<T> where T : BaseEntity, IAggregateRoot
     {
         protected readonly PayrollContext _dbContext;
@@ -82,6 +73,89 @@ namespace Assessment.Infrastructure.Data
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             return SpecificationEvaluator.Default.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
+        }
+        public async Task<SalaryReport> GetSalaryReportByPaymentHistoryIdAsync(int paymentHistoryId, CancellationToken cancellationToken = default)
+        {
+            var paymentQuery =
+                from ph in _dbContext.PaymentHistories
+                join ts in _dbContext.Timesheets on ph.TimesheetId equals ts.Id
+                join c in _dbContext.Contracts on ts.ContractId equals c.Id
+                join e in _dbContext.Employees on c.EmployeeId equals e.Id
+                where ph.Id == paymentHistoryId
+                select new SalaryReport
+                {
+                    EmployeeId = e.Id,
+                    FirstName = e.FirstName,
+                    LastName = e.LastName,
+                    BirthDate = e.BirthDate,
+                    Age = (DateTime.Now.Subtract(e.BirthDate).Days / 365),
+                    ContractStartDate = c.StartDate,
+                    ContractEndDate = c.EndDate,
+                    PayMethod = c.PayMethod,
+                    Wage = c.Wage,
+                    WorkingWeekHours = c.WorkingWeekHours,
+                    MaxAllowedSickLeaveHours = c.MaxAllowedSickLeaveHours,
+                    MaxAllowedVacationHours = c.MaxAllowedVacationHours,
+                    TimesheetFromDate = ts.FromDate,
+                    TimesheetToDate = ts.ToDate,
+                    TimesheetWorkingHours = ts.WorkingHours,
+                    SickLeaveHours = ts.SickLeaveHours,
+                    VacationHours = ts.VacationHours,
+                    Payed = ts.IsPayed ? "Yes" : "No",
+                    CalculationTime = ph.CalculationTime,
+                    PaymentTime = ph.PaymentTime,
+                    BenefitsTotal = ph.PaymentFactors.Where(f => f.PaymentFactorType == PaymentFactorType.Benefit).Sum(f => f.Amount),
+                    DeductionsTotal = ph.PaymentFactors.Where(f => f.PaymentFactorType == PaymentFactorType.Deduction).Sum(f => f.Amount),
+                    GrossIncome = ph.GrossIncome,
+                    Tax = ph.Tax,
+                    NetIncome = ph.NetIncome
+                };
+            return paymentQuery.FirstOrDefault();
+        }
+
+        public async Task<Employee> GetEmployeeHistory(int employeeId, CancellationToken cancellationToken = default)
+        {
+            var historyQuery = _dbContext.Employees.Where(e => e.Id == employeeId).Include(e => e.Contracts).ThenInclude(c => c.Timesheets).ThenInclude(t => t.PaymentHistories).ThenInclude(p => p.PaymentFactors);
+            return historyQuery.FirstOrDefault();
+        }
+
+        public async Task<IQueryable<SalaryReport>> GetEmployeePaymentsHistory(int employeeId, CancellationToken cancellationToken = default)
+        {
+            var paymentQuery =
+                from ph in _dbContext.PaymentHistories
+                join ts in _dbContext.Timesheets on ph.TimesheetId equals ts.Id
+                join c in _dbContext.Contracts on ts.ContractId equals c.Id
+                join e in _dbContext.Employees on c.EmployeeId equals e.Id
+                where e.Id == employeeId
+                select new SalaryReport
+                {
+                    EmployeeId = e.Id,
+                    FirstName = e.FirstName,
+                    LastName = e.LastName,
+                    BirthDate = e.BirthDate,
+                    Age = (DateTime.Now.Subtract(e.BirthDate).Days / 365),
+                    ContractStartDate = c.StartDate,
+                    ContractEndDate = c.EndDate,
+                    PayMethod = c.PayMethod,
+                    Wage = c.Wage,
+                    WorkingWeekHours = c.WorkingWeekHours,
+                    MaxAllowedSickLeaveHours = c.MaxAllowedSickLeaveHours,
+                    MaxAllowedVacationHours = c.MaxAllowedVacationHours,
+                    TimesheetFromDate = ts.FromDate,
+                    TimesheetToDate = ts.ToDate,
+                    TimesheetWorkingHours = ts.WorkingHours,
+                    SickLeaveHours = ts.SickLeaveHours,
+                    VacationHours = ts.VacationHours,
+                    Payed = ts.IsPayed ? "Yes" : "No",
+                    CalculationTime = ph.CalculationTime,
+                    PaymentTime = ph.PaymentTime,
+                    BenefitsTotal = ph.PaymentFactors.Where(f => f.PaymentFactorType == PaymentFactorType.Benefit).Sum(f => f.Amount),
+                    DeductionsTotal = ph.PaymentFactors.Where(f => f.PaymentFactorType == PaymentFactorType.Deduction).Sum(f => f.Amount),
+                    GrossIncome = ph.GrossIncome,
+                    Tax = ph.Tax,
+                    NetIncome = ph.NetIncome
+                };
+            return paymentQuery;
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Assessment.Infrastructure.Data
                     var t = payrollContext.Timesheets.ToList();
                     foreach (var ts in t)
                     {
-                        var ph = new PaymentHistory(ts.ContractId, ts.ToDate.AddDays(1), ts.ToDate.AddDays(2), -1, -1, -1);
+                        var ph = new PaymentHistory(ts.Id, ts.ToDate.AddDays(1), ts.ToDate.AddDays(2), -1, -1, -1);
                         payrollContext.PaymentHistories.Add(ph);
                         payrollContext.SaveChanges();
                         int ph_id = ph.Id;

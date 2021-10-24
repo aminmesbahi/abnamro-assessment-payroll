@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assessment.ApplicationCore.Entities;
+using System;
 
 namespace Assessment.Api.EmployeeEndpoints
 {

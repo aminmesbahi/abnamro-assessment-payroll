@@ -1,5 +1,5 @@
-﻿using Assessment.ApplicationCore.Entities;
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
+using Assessment.ApplicationCore.Entities;
 
 namespace Assessment.ApplicationCore.Interfaces
 {
@@ -14,5 +14,8 @@ namespace Assessment.ApplicationCore.Interfaces
         Task<int> CountAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         Task<T> FirstAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         Task<T> FirstOrDefaultAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
+        Task<SalaryReport> GetSalaryReportByPaymentHistoryIdAsync(int paymentHistoryId, CancellationToken cancellationToken = default);
+        Task<Employee> GetEmployeeHistory(int employeeId, CancellationToken cancellationToken = default);
+        Task<IQueryable<SalaryReport>> GetEmployeePaymentsHistory(int employeeId, CancellationToken cancellationToken = default);
     }
 }

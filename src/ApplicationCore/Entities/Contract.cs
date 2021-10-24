@@ -32,6 +32,7 @@
         public int WorkingWeekHours { get; set; }
         public int MaxAllowedSickLeaveHours { get; set; }
         public int MaxAllowedVacationHours { get; set; }
+        public IList<Timesheet> Timesheets { get; set; }
     }
 
 }

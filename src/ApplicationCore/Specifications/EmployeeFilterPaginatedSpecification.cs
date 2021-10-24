@@ -8,7 +8,7 @@ namespace Assessment.ApplicationCore.Specifications
         public EmployeeFilterPaginatedSpecification(int skip, int take, PayMethod? payMethod)
             : base()
         {
-            Query.Where(i => !payMethod.HasValue || (i.Contracts.Where(c => c.EndDate >= DateTime.Now).Any() && i.Contracts.OrderByDescending(c=>c.Id).First().PayMethod == payMethod))
+            Query.Where(i => !payMethod.HasValue || (i.Contracts.Where(c => c.EndDate >= DateTime.Now).Any() && i.Contracts.OrderByDescending(c => c.Id).First().PayMethod == payMethod))
                .Skip(skip).Take(take);
         }
     }

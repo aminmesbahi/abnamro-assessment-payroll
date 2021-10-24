@@ -119,7 +119,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("PaymentHistoryId");
 
-                    b.ToTable("PaymentFactor");
+                    b.ToTable("PaymentFactors");
                 });
 
             modelBuilder.Entity("Assessment.ApplicationCore.Entities.PaymentHistory", b =>
@@ -249,7 +249,7 @@ namespace Infrastructure.Data.Migrations
             modelBuilder.Entity("Assessment.ApplicationCore.Entities.Contract", b =>
                 {
                     b.HasOne("Assessment.ApplicationCore.Entities.Employee", "Employee")
-                        .WithMany("PaymentFactors")
+                        .WithMany("Contracts")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -303,7 +303,7 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Assessment.ApplicationCore.Entities.Employee", b =>
                 {
-                    b.Navigation("PaymentFactors");
+                    b.Navigation("Contracts");
                 });
 
             modelBuilder.Entity("Assessment.ApplicationCore.Entities.PaymentHistory", b =>
