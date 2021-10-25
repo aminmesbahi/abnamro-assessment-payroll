@@ -33,7 +33,7 @@ In this project, I designed the following scenario:
     - Tax
 + TaxReference: this table is the parent of TaxBrackets to storing the Tax steps in each year
 
-
+![Database Diagram](docs/db-diagram.png)
 
 
 ### **Scenario**
