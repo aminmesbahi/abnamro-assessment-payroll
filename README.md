@@ -36,6 +36,29 @@ In this project, I designed the following scenario:
 ![Database Diagram](docs/db-diagram.png)
 
 
+## Project Structure
++ ApplicationCore
++ Infrastructure
++ Api
++ Web
+
+![Projects, Physical structure](docs/solution-projects.png)
+
+# Screenshots
+![The main page to view employees list](docs/front-1-list.png)
+![Creating new employee](docs/front-1-create.png)
+![Validation in UI](docs/front-1-create-validation.png)
+![Editing an employee data](docs/front-1-edit.png)
+![Delete an employee](docs/front-1-delete.png)
+![List of contracts including all timesheets](docs/front-1-history.png)
+![Export a single salary report](docs/export.png)
+![View in Excel](docs/csv.png)
+![Swagger REST test](docs/swagger.png)
+![Projects, Core](docs/core.png)
+![Projects, Infrastructure](docs/infrastructure.png)
+![Projects, API](docs/api.png)
+![Projects, Web](docs/web.png)
+![Projects, Unit tests](docs/unit-test.png)
 ### **Scenario**
 You are tasked to support the salary admin of a small company. This department has two main responsibilities:
 * Capturing the details of new employees
