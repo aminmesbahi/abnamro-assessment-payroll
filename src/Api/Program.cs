@@ -2,7 +2,6 @@ using Assessment.ApplicationCore;
 using Assessment.ApplicationCore.Interfaces;
 using Assessment.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +25,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-if (!builder.Environment.IsDevelopment()) { 
+if (!builder.Environment.IsDevelopment())
+{
     builder.Services.AddDbContext<PayrollContext>(c =>
                 c.UseSqlServer(builder.Configuration.GetConnectionString("PayrollConnection")));
 
@@ -35,8 +35,8 @@ else
 {
     builder.Services.AddDbContext<PayrollContext>(c =>
       c.UseInMemoryDatabase("Catalog"));
-   // builder.Services.AddDbContext<PayrollContext>(c =>
-     //         c.UseSqlServer(builder.Configuration.GetConnectionString("PayrollConnection")));
+    // builder.Services.AddDbContext<PayrollContext>(c =>
+    //         c.UseSqlServer(builder.Configuration.GetConnectionString("PayrollConnection")));
 }
 
 builder.Services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
@@ -51,7 +51,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var loggerFactory = services.GetRequiredService<ILoggerFactory>();
     try
-    {        
+    {
         var payrollContext = services.GetRequiredService<PayrollContext>();
         await payrollContext.Database.EnsureCreatedAsync();
         await PayrollContextSeed.SeedAsync(payrollContext, loggerFactory);
@@ -64,11 +64,10 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 
