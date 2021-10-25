@@ -2,10 +2,15 @@
 
 > My assumption in designing and implementing this project was demonstrating of abilities, in a short time and within an uncertain declaration about requirements and desires, I tried to make footprints and signs about prooving my expertise in .NET and software engineering.
 
+> ### Known Issues:
+> * Domain objects should have data type attributes ```[Required], [MaxLength(60)]``` **Why I didn't?** you can find */db_scripts/Table_Employee.sql*, this is the structure and documentaion I preffer for creating database structure using SSDT (SQL Server Data Studio) becuase it is maintainable, version-control enabled and much more accurate than basic migration approach.
+> * Unit tests are as little as you find out I know what unit test is. In real-world scenarios (TDD approach), first, we have to clarify the requirement, then develop tests into *[Fail --> Pass --> Refactor]* steps. So writing Fixtures and calculating *Covering Index* and other testing considerations (Integration test, functional test, etc.) are out of the task assignment time limits but *necessary* in the real world.
+
 ## Live demo
 * [API (swagger)](https://api.payroll.mesbahi.net/swagger/index.html)
 * [Web UI](https://web.payroll.mesbahi.net)
 
+You can download .csv report for all contracts and payments of an employee, or only for specific timesheet.
 ## Intro
 In this project, I designed the following scenario:
 + Employee
